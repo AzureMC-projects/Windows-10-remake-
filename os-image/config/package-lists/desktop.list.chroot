@@ -1,0 +1,13 @@
+live-boot
+live-config
+xserver-xorg
+xinit
+openbox
+lightdm
+chromium
+fonts-liberation
+fonts-noto-core
+dbus-x11
+network-manager
+x11-xserver-utils
+ca-certificates
