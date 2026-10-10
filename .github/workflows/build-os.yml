@@ -31,10 +31,9 @@ jobs:
 
       - name: Prepare Debian live-build configuration
         run: |
-          mkdir -p os-image/work
-          cp -a lockscreen index.html styles.css src os-image/work/
           mkdir -p os-image/config/includes.chroot/opt/windows-remake
           cp -a lockscreen index.html styles.css src os-image/config/includes.chroot/opt/windows-remake/
+          sudo chmod +x os-image/config/hooks/normal/0100-copy-user-data.hook.chroot
           cd os-image
           sudo lb config noauto \
             --distribution bookworm \
@@ -45,14 +44,6 @@ jobs:
             --bootappend-live "boot=live components username=user hostname=windows-remake" \
             --apt-recommends true \
             --memtest none
-
-      - name: Configure kiosk startup
-        run: |
-          sudo mkdir -p os-image/config/includes.chroot/etc/lightdm/lightdm.conf.d
-          sudo cp os-image/config/includes.chroot/etc/lightdm/lightdm.conf.d/50-windows-remake.conf os-image/config/includes.chroot/etc/lightdm/lightdm.conf.d/
-          sudo mkdir -p os-image/config/includes.chroot/etc/xdg/openbox
-          sudo cp os-image/config/includes.chroot/etc/xdg/openbox/autostart os-image/config/includes.chroot/etc/xdg/openbox/autostart
-          sudo chmod +x os-image/config/hooks/normal/0100-copy-user-data.hook.chroot
 
       - name: Build hybrid ISO
         working-directory: os-image
