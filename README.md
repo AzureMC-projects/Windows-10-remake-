@@ -49,12 +49,12 @@ Current limitations:
 - Start menu, app search, Task View, notification panel, clock and date
 - Draggable, resizable, minimisable, maximisable and closable application windows
 - Taskbar indicators, Alt+Tab switching, edge snapping and show-desktop
-- Virtual File Explorer, Notepad, Calculator, Paint, Settings, simulated Browser, Recycle Bin, Task Manager, safe simulated command prompt, Calendar and Clock
+- Virtual File Explorer, Notepad, Calculator, Paint, Settings, web browser (embedded websites where permitted, with an open-in-browser fallback), Windows app link launcher, Recycle Bin, Task Manager, safe simulated command prompt, Calendar and Clock
 - Local browser storage for simulated files and preferences
 
 ## Safety and persistence
 
-The desktop's file system and command prompt are simulations. They do not execute shell commands or modify host system files. Browser local storage holds virtual files and preferences; clearing site data may erase them. Paint PNG export is user-initiated.
+The desktop's file system and command prompt are simulations. They do not execute shell commands or modify host system files. The web browser attempts to load real websites, but some sites block embedding; use its open-in-browser button for those sites. The Windows Apps launcher can request a few registered Windows URI handlers (such as Calculator or Settings), depending on browser permissions. A browser page cannot directly run arbitrary Windows `.exe` applications; that requires a separately installed desktop companion app. Browser local storage holds virtual files and preferences; clearing site data may erase them. Paint PNG export is user-initiated.
 
 ## Project structure
 
