@@ -1,0 +1,4 @@
+# Start networking and the graphical lock screen for the live session.
+nm-applet >/tmp/windows-remake-network.log 2>&1 &
+sleep 2
+chromium --no-first-run --no-default-browser-check --disable-session-crashed-bubble --disable-infobars --kiosk --user-data-dir=/home/user/.config/windows-remake-kiosk file:///opt/windows-remake/lockscreen/index.html
