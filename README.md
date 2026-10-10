@@ -2,12 +2,40 @@
 
 A Windows-inspired desktop project growing from a browser prototype toward a bootable Linux-based OS preview. This is an independent project and is not affiliated with Microsoft.
 
-## Try the desktop prototype on Windows
+## Java desktop edition (no HTML required)
 
-Requirements: Windows 10/11 and a modern browser. Node.js 18+ is optional.
+The repository now includes a separate native Java Swing desktop prototype in `java-app/`. It runs as a regular desktop application and opens real websites in your default browser instead of trying to embed them in an iframe. It includes a Start menu, desktop shortcuts, windowed apps, a simple calculator, Notepad with open/save, folder shortcuts, Paint drawing, and basic personalisation.
 
-- **Quick start:** open `index.html` in Edge, Chrome, Firefox, or another modern browser.
-- **Local server:** run `npm start` in this directory, then open the local URL printed by the server.
+**Build requirements:** Java Development Kit (JDK) 25 and Gradle 9.1 or newer. The JAR is platform-independent, but this prototype uses Windows-specific launching for the Windows Settings shortcut.
+
+### Build a JAR on your PC
+
+1. Install JDK 25.
+2. Install Gradle 9.1 or newer.
+3. Open Command Prompt in the repository's `java-app` folder.
+4. Run:
+   ```bat
+   gradle clean build
+   ```
+5. Run the generated JAR:
+   ```bat
+   java -jar build\libs\Windows-Remake-1.0.0.jar
+   ```
+
+No HTML browser page is needed to run this Java edition. The JAR still requires a compatible Java runtime to be installed.
+
+### Build the JAR online instead
+
+If you don't want to install build tools on your PC:
+
+1. Open the repository's **Actions** tab.
+2. Select **Build Java desktop JAR** and click **Run workflow** (or wait for it to run after a change to `java-app/`).
+3. Open the completed run and download the `Windows-Remake-Java-JAR` artifact.
+4. Extract the downloaded ZIP and run the JAR with Java 25 installed.
+
+## Try the original HTML desktop prototype
+
+Open `index.html` in Edge, Chrome, Firefox, or another modern browser. The HTML version remains in the repository; the Java version is a separate alternative.
 
 ## Preview the lock screen
 
@@ -37,31 +65,23 @@ The workflow can also run automatically when lock screen, desktop, or OS image f
 
 The ISO is a lightweight Debian Live system. It starts a graphical session and launches Chromium in kiosk mode to show the custom lock screen. Clicking the logo opens the existing desktop simulation. Linux supplies the kernel, drivers, and base system; this is not a custom kernel yet.
 
-Current limitations:
-- The lock screen logo is a visual unlock, not authentication.
-- Most built-in desktop applications remain simulations.
-- The live session does not preserve changes after reboot.
-- Hardware compatibility, networking, Secure Boot, and boot behavior need testing.
-- Do not use this prototype as your primary OS or on a machine containing data you cannot risk.
+## Java edition limitations
 
-## Desktop features
-
-- Start menu, app search, Task View, notification panel, clock and date
-- Draggable, resizable, minimisable, maximisable and closable application windows
-- Taskbar indicators, Alt+Tab switching, edge snapping and show-desktop
-- Virtual File Explorer, Notepad, Calculator, Paint, Settings, web browser (embedded websites where permitted, with an open-in-browser fallback), Windows app link launcher, Recycle Bin, Task Manager, safe simulated command prompt, Calendar and Clock
-- Local browser storage for simulated files and preferences
+- This is a desktop simulation, not a replacement operating system or a Windows clone.
+- The browser helper opens sites in your default browser; it does not embed a full browser engine inside the Java window.
+- File Explorer shortcuts open actual Windows folders in File Explorer. Notepad can open and save files you select.
+- Paint supports basic drawing but currently has no export feature.
+- The JAR requires Java 25; it does not bundle a Java runtime.
 
 ## Safety and persistence
 
-The desktop's file system and command prompt are simulations. They do not execute shell commands or modify host system files. The web browser attempts to load real websites, but some sites block embedding; use its open-in-browser button for those sites. The Windows Apps launcher can request a few registered Windows URI handlers (such as Calculator or Settings), depending on browser permissions. A browser page cannot directly run arbitrary Windows `.exe` applications; that requires a separately installed desktop companion app. Browser local storage holds virtual files and preferences; clearing site data may erase them. Paint PNG export is user-initiated.
+The original browser version's file system and command prompt are simulations. The Java edition's Notepad can write files only when you explicitly choose a save location, and its folder shortcuts open real user folders. Review file paths before saving.
 
 ## Project structure
 
-- `index.html` — desktop shell and taskbar
-- `styles.css` — desktop, windows, panels and app styling
-- `src/app.js` — window manager and simulated apps
-- `lockscreen/` — custom lock screen and click-to-enter transition
+- `index.html`, `styles.css`, `src/app.js` — original HTML desktop prototype
+- `java-app/` — Java 25 Swing desktop application and Gradle build
+- `lockscreen/` — custom HTML lock screen and click-to-enter transition
 - `os-image/` — Debian Live configuration
 - `.github/workflows/build-os.yml` — remote ISO build workflow
-- `package.json` — local development server scripts
+- `.github/workflows/build-java-app.yml` — remote Java JAR build workflow
