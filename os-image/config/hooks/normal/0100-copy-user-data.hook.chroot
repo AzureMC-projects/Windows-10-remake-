@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+if id user >/dev/null 2>&1; then
+  mkdir -p /home/user/.config
+  chown -R user:user /home/user/.config
+fi
