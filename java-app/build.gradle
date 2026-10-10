@@ -1,0 +1,15 @@
+plugins { id 'application' }
+
+group = 'com.azuremc'
+version = '1.0.0'
+
+java {
+    toolchain { languageVersion = JavaLanguageVersion.of(25) }
+}
+
+application { mainClass = 'com.azuremc.windowsremake.Main' }
+
+tasks.named('jar') {
+    archiveBaseName = 'Windows-Remake'
+    manifest { attributes 'Main-Class': application.mainClass }
+}
