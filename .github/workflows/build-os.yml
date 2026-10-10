@@ -23,31 +23,37 @@ jobs:
       - name: Check out project
         uses: actions/checkout@v4
 
-      - name: Install live-build and image tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends \
-            live-build debootstrap squashfs-tools xorriso isolinux syslinux-common
-
-      - name: Prepare Debian live-build configuration
+      - name: Prepare desktop files for the image
         run: |
           mkdir -p os-image/config/includes.chroot/opt/windows-remake
           cp -a lockscreen index.html styles.css src os-image/config/includes.chroot/opt/windows-remake/
-          sudo chmod +x os-image/config/hooks/normal/0100-copy-user-data.hook.chroot
-          cd os-image
-          sudo lb config noauto \
-            --distribution bookworm \
-            --architectures amd64 \
-            --binary-images iso-hybrid \
-            --archive-areas "main contrib non-free-firmware" \
-            --debian-installer none \
-            --bootappend-live "boot=live components username=user hostname=windows-remake" \
-            --apt-recommends true \
-            --memtest none
 
-      - name: Build hybrid ISO
-        working-directory: os-image
-        run: sudo lb build
+      - name: Build Debian Live ISO in a Debian container
+        run: |
+          docker run --privileged --rm \
+            -v "$GITHUB_WORKSPACE:/work" \
+            -w /work/os-image \
+            debian:bookworm bash -lc '
+              set -eux
+              apt-get update
+              DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+                live-build debootstrap squashfs-tools xorriso isolinux syslinux-common \
+                grub-pc-bin grub-efi-amd64-bin dosfstools mtools
+              chmod +x config/hooks/normal/0100-copy-user-data.hook.chroot
+              lb config noauto \
+                --distribution bookworm \
+                --architectures amd64 \
+                --binary-images iso-hybrid \
+                --mirror-bootstrap http://deb.debian.org/debian \
+                --mirror-chroot http://deb.debian.org/debian \
+                --mirror-binary http://deb.debian.org/debian \
+                --archive-areas "main contrib non-free-firmware" \
+                --debian-installer none \
+                --bootappend-live "boot=live components username=user hostname=windows-remake" \
+                --apt-recommends true \
+                --memtest none
+              lb build
+            '
 
       - name: Rename ISO
         run: |
