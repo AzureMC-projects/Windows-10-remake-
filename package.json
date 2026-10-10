@@ -1,0 +1,10 @@
+{
+  "name": "windows-desktop-simulation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interactive browser desktop simulation",
+  "scripts": {
+    "start": "npx --yes serve .",
+    "dev": "npx --yes serve ."
+  }
+}
